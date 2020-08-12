@@ -28,12 +28,13 @@ describe('http-server-streams/file-server-get', () => {
       it('файл отдается по запросу', (done) => {
         fse.copyFileSync(
             path.join(fixturesFolder, 'index.js'),
-            path.join(filesFolder, 'index.js')
+            path.join(filesFolder, 'index.js'),
         );
 
         const content = fse.readFileSync(path.join(filesFolder, 'index.js'));
 
         const request = http.request('http://localhost:3001/index.js', async (response) => {
+          console.log('response.statusCode', response.statusCode);
           expect(response.statusCode, 'статус код ответа 200').to.equal(200);
 
           const body = [];
@@ -43,7 +44,7 @@ describe('http-server-streams/file-server-get', () => {
 
           expect(
               Buffer.concat(body).equals(content),
-              'ответ сервера - исходный файл index.js'
+              'ответ сервера - исходный файл index.js',
           ).to.be.true;
           done();
         });
